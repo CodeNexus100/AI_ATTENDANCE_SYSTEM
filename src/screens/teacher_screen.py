@@ -13,6 +13,7 @@ from src.pipelines.face_pipeline import predict_attendance
 import numpy as np
 from src.components.dialog_attendance_results import attendance_result_dialog
 from src.database.config import supabase
+from src.components.dialog_voice_attendance import voice_attendance_dialog
 import pandas as pd
 
 def teacher_screen():
@@ -187,8 +188,9 @@ def teacher_tab_take_attendance():
                 # st.session_state.attendance_images = []
                 # st.rerun()
     with c3:
-        if st.button('Use Voice Attendance', type='primary', width='stretch', icon=':material/mic:', disabled=True, help="Voice features currently disabled"):
-            voice_attendance_dialog()
+        # if st.button('Use Voice Attendance', type='primary', width='stretch', icon=':material/mic:', disabled=True, help="Voice features currently disabled"):
+        if st.button('Use Voice Attendance', type='primary', width='stretch', icon=':material/mic:', disabled=False):
+            voice_attendance_dialog(selected_subject_id)
 
 def teacher_tab_manage_subjects():
     teacher_id = st.session_state.teacher_data['teacher_id']
