@@ -21,11 +21,11 @@ def load_dlib_models():
 
 def get_face_embeddings(image_np):
     detector, sp, facerec = load_dlib_models()
-    # faces = detector(image_np, 1)
-    faces = detector(image_np, 0)
+    faces = detector(image_np, 1)
+    # faces = detector(image_np, 0)
     encodings = []
     for face in faces:
-        shape = sp(image_np, faces)
+        shape = sp(image_np, face)
         face_descriptor = facerec.compute_face_descriptor(image_np, shape, 1) # 128 embeddings
 
         encodings.append(np.array(face_descriptor))
