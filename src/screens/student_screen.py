@@ -1,6 +1,6 @@
 from src.pipelines.face_pipeline import train_classifier
 from src.pipelines.face_pipeline import get_face_embeddings, predict_attendance
-from src.database.db import get_all_students
+from src.database.db import get_all_students, create_student
 import streamlit as st
 from src.ui.style_base_layout import style_background_dashboard, style_base_layout
 from src.components.header import header_dashboard
@@ -10,12 +10,13 @@ import numpy as np
 import time
 from src.pipelines.voice_pipeline import get_voice_embeddings
 
-show_registration = False
 
 def student_dashboard():
     st.header("DASHBOARD HERE")
 
 def student_screen():
+    show_registration = False
+
     style_background_dashboard()
     style_base_layout()
 
@@ -85,7 +86,7 @@ def student_screen():
                         img = np.array(Image.open(photo_source))
                         encodings = get_face_embeddings(img)
                         if encodings:
-                            face_emb = encodings[0].toList()
+                            face_emb = encodings[0].tolist()
                             voice_emb = None
                             if audio_data:
                                 voice_emb = get_voice_embeddings(audio_data.read())

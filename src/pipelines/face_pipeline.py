@@ -11,7 +11,7 @@ def load_dlib_models():
     detector = dlib.get_frontal_face_detector()
 
     sp = dlib.shape_predictor(
-        face_recognition_models.pose_predictor_model("shape_predictor_68_face_landmarks.dat")
+        face_recognition_models.pose_predictor_model_location()
     )
     
     facerec = dlib.face_recognition_model_v1(
@@ -21,7 +21,8 @@ def load_dlib_models():
 
 def get_face_embeddings(image_np):
     detector, sp, facerec = load_dlib_models()
-    faces = detector(image_np, 1)
+    # faces = detector(image_np, 1)
+    faces = detector(image_np, 0)
     encodings = []
     for face in faces:
         shape = sp(image_np, faces)
