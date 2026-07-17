@@ -1,3 +1,4 @@
+streamlit
 # Utilities
 numpy
 pandas
@@ -13,7 +14,6 @@ supabase
 bcrypt
 segno # Used to convert links to qr code
 pillow # Image preprocessing, allows you to flip, transform, rescale images, etc.
-streamlit
 
 librosa
 resemblyzer

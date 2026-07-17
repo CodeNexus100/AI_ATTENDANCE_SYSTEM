@@ -15,6 +15,7 @@ from src.components.dialog_attendance_results import attendance_result_dialog
 from src.database.config import supabase
 from src.components.dialog_voice_attendance import voice_attendance_dialog
 import pandas as pd
+from src.database.db import get_attendance_for_teacher
 
 def teacher_screen():
     style_background_dashboard()
@@ -82,7 +83,7 @@ def teacher_dashboard():
         teacher_tab_attendance_records()
     
 
-    footer_dashboard()
+    # footer_dashboard()
 
 
 # def teacher_tab_take_attendance():
@@ -232,6 +233,51 @@ def teacher_tab_manage_subjects():
 
 def teacher_tab_attendance_records():
     st.header('Attendance Records')
+
+    teacher_id = st.session_state.teacher_data['teacher_id']
+
+    records = get_attendance_for_teacher(teacher_id)
+
+    if not records:
+        return
+    
+    data = []
+
+    for r in records:
+        ts = r.get('timestamp')
+
+        data.append({
+            "ts_group": ts.split(".")[0] if ts else None,
+            "Time": datetime.fromisoformat(ts).strftime("%Y-%m-%d %I:%M %p") if ts else "N'A",
+            "Subject": r['subjects']['name'],
+            "Subject Code":r['subjects']['subject_code'],
+            "is_present": bool(r.get('is_present', False))
+        })
+
+
+    df = pd.DataFrame(data)
+
+
+
+    summary = (
+        df.groupby(['ts_group', 'Time', 'Subject', 'Subject Code'])
+        .agg(
+            Present_Count = ('is_present', 'sum'),
+            Total_Count =('is_present', 'count')
+        ).reset_index()
+
+    )
+
+    summary['Attendance Stats'] = (
+        "✅ " + summary['Present_Count'].astype(str) + " /"
+        + summary['Total_Count'].astype(str) + ' Students'
+    )
+
+    display_df = ( summary.sort_values(by='ts_group' ,ascending=False)
+                  [['Time', 'Subject', 'Subject Code', 'Attendance Stats']]
+                  )
+    
+    st.dataframe(display_df, width='stretch', hide_index=True)
     
     
 
@@ -291,7 +337,7 @@ def teacher_screen_login():
         if st.button('Register Instead', type='primary', icon=':material/passkey:', width='stretch'):
             st.session_state.teacher_login_type = 'register'
 
-    footer_dashboard()
+    # footer_dashboard()
 
 def register_teacher(teacher_username, teacher_name, teacher_pass, teacher_pass_confirm):
     if not teacher_username or not teacher_name or not teacher_pass:
@@ -355,4 +401,4 @@ def teacher_screen_register():
         if st.button('Login Instead', type='primary', icon=':material/passkey:', width='stretch'):
             st.session_state.teacher_login_type = 'login'
 
-    footer_dashboard()
+    # footer_dashboard()

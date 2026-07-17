@@ -83,7 +83,7 @@ def student_dashboard():
                 ],
                 footer_callback=unenroll_button
             )
-    footer_dashboard()
+    # footer_dashboard()
 
 
 def student_screen():
@@ -180,6 +180,6 @@ def student_screen():
 
                 else:
                     st.warning('Please enter your name!')
-    footer_dashboard()
+    # footer_dashboard()
     
 
