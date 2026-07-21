@@ -82,6 +82,8 @@ python -m streamlit run app.py
 ```
 The app will open automatically in your browser at `http://localhost:8501`.
 
+Streamlit Deployed Link : https://snapclass-app-ai.streamlit.app
+
 ---
 
 ## 🤝 Contributing
